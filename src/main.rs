@@ -2,14 +2,23 @@ use rltk::{Console, GameState, Rltk, RGB};
 use specs::prelude::*;
 
 mod components;
+
 pub use components::*;
+
 mod map;
+
 pub use map::*;
+
 mod player;
+
 use player::*;
+
 mod rect;
+
 use rect::*;
+
 mod visibility_system;
+
 use visibility_system::*;
 
 #[macro_use]
@@ -23,7 +32,7 @@ pub struct State {
 
 impl State {
     fn run_systems(&mut self) {
-        let mut vis = VisibilitySystem{};
+        let mut vis = VisibilitySystem {};
         vis.run_now(&self.ecs);
         self.ecs.maintain();
     }
@@ -72,7 +81,7 @@ fn main() {
             bg: RGB::named(rltk::BLACK),
         })
         .with(Player {})
-        .with(Viewshed { visible_tiles: Vec::new(), range: 8 })
+        .with(Viewshed { visible_tiles: Vec::new(), range: 8, dirty: true })
         .build();
 
     rltk::main_loop(context, gs);
