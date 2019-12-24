@@ -13,6 +13,8 @@ mod monster_ai_system;
 mod map_indexing_system;
 mod melee_combat_system;
 mod damage_system;
+mod gui;
+mod gamelog;
 
 pub use components::*;
 pub use map::*;
@@ -106,11 +108,14 @@ impl GameState for State {
                 ctx.set(pos.x, pos.y, render.fg, render.bg, render.glyph);
             }
         }
+
+        gui::draw_ui(&self.ecs, ctx);
     }
 }
 
 fn main() {
-    let context = Rltk::init_simple8x8(80, 50, "Rust Roguelike World", "resources");
+    let mut context = Rltk::init_simple8x8(80, 50, "Rust Roguelike World", "resources");
+//    context.with_post_scanlines(true);
 
     let mut gs = State {
         ecs: World::new()
@@ -182,6 +187,7 @@ fn main() {
     gs.ecs.insert(Point::new(player_x, player_y));
     gs.ecs.insert(player_entity);
     gs.ecs.insert(RunState::PreRun);
+    gs.ecs.insert(gamelog::GameLog{ entries : vec!["Welcome to Rust Roguelike World".to_string()] });
 
     rltk::main_loop(context, gs);
 }
